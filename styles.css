@@ -1,0 +1,760 @@
+/* ==========================================================================
+   VUCCIRIA — « L'abbanniata »
+   Crème papier / encre / sanguine — typo criée, étiquettes de marché
+   Mobile d'abord (375–390), desktop = extension
+   ========================================================================== */
+
+:root {
+  --papier: #F4EDE2;
+  --papier-fonce: #EAE0D0;
+  --encre: #1A1512;
+  --encre-douce: #453C34;
+  --sanguine: #C93A1D;
+  --sanguine-sombre: #92240D;
+
+  --fonte-cri: "Archivo", "Arial Black", sans-serif;
+  --fonte-texte: "Newsreader", Georgia, serif;
+
+  --gouttiere: clamp(20px, 5.5vw, 28px);
+  --mesure: 34ch;
+}
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+html { scroll-behavior: smooth; }
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+}
+
+body {
+  background: var(--papier);
+  color: var(--encre);
+  font-family: var(--fonte-texte);
+  font-size: 1.0625rem;
+  line-height: 1.55;
+  -webkit-font-smoothing: antialiased;
+  overflow-x: clip;
+}
+
+/* Grain papier discret */
+body::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 1;
+  opacity: .5;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2'/%3E%3CfeColorMatrix values='0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0.04 0'/%3E%3C/filter%3E%3Crect width='120' height='120' filter='url(%23n)'/%3E%3C/svg%3E");
+}
+
+img { max-width: 100%; height: auto; display: block; }
+
+em { font-style: italic; }
+
+a { color: inherit; }
+
+.skip-link {
+  position: absolute;
+  top: -60px;
+  left: var(--gouttiere);
+  z-index: 60;
+  background: var(--encre);
+  color: var(--papier);
+  padding: .6em 1em;
+  font-family: var(--fonte-cri);
+  font-size: .8rem;
+  text-decoration: none;
+  transition: top .2s ease;
+}
+.skip-link:focus { top: 8px; }
+
+/* ==========================================================================
+   LA CRIÉE — animation d'entrée
+   ========================================================================== */
+
+.criee {
+  position: fixed;
+  inset: 0;
+  z-index: 50;
+  background: var(--papier);
+  display: grid;
+  place-items: center;
+  overflow: hidden;
+}
+.criee.criee-finie { display: none; }
+
+.criee-word {
+  position: absolute;
+  font-family: var(--fonte-cri);
+  font-weight: 900;
+  font-stretch: 78%;
+  font-size: clamp(2rem, 9vw, 4.5rem);
+  letter-spacing: -0.01em;
+  color: var(--sanguine);
+  opacity: 0;
+}
+.criee-w1 { top: 18%; left: 8%; rotate: -5deg; }
+.criee-w2 { top: 42%; right: 7%; rotate: 3deg; color: var(--encre); }
+.criee-w3 { bottom: 26%; left: 12%; rotate: -2deg; }
+
+.criee-title {
+  font-family: var(--fonte-cri);
+  font-weight: 900;
+  font-stretch: 68%;
+  font-size: clamp(3.4rem, 17vw, 11rem);
+  color: var(--encre);
+  opacity: 0;
+  transform: scale(.94) rotate(-1.5deg);
+}
+
+.criee-anime .criee-w1 { animation: cri-stamp .28s cubic-bezier(.2,.9,.3,1) .05s forwards, cri-sort .2s ease .75s forwards; }
+.criee-anime .criee-w2 { animation: cri-stamp .28s cubic-bezier(.2,.9,.3,1) .3s forwards, cri-sort .2s ease .95s forwards; }
+.criee-anime .criee-w3 { animation: cri-stamp .28s cubic-bezier(.2,.9,.3,1) .55s forwards, cri-sort .2s ease 1.1s forwards; }
+.criee-anime .criee-title { animation: cri-titre .45s cubic-bezier(.2,.9,.25,1) 1.15s forwards; }
+.criee-anime { animation: criee-part .4s ease 2s forwards; }
+
+@keyframes cri-stamp {
+  from { opacity: 0; transform: scale(1.6); }
+  to   { opacity: 1; transform: scale(1); }
+}
+@keyframes cri-sort {
+  to { opacity: 0; }
+}
+@keyframes cri-titre {
+  from { opacity: 0; transform: scale(.94) rotate(-1.5deg); }
+  to   { opacity: 1; transform: scale(1) rotate(0deg); }
+}
+@keyframes criee-part {
+  to { opacity: 0; visibility: hidden; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .criee { display: none; }
+}
+
+/* ==========================================================================
+   EN-TÊTE
+   ========================================================================== */
+
+.topbar {
+  position: sticky;
+  top: 0;
+  z-index: 30;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 12px var(--gouttiere);
+  background: color-mix(in srgb, var(--papier) 92%, transparent);
+  border-bottom: 2px solid var(--encre);
+}
+
+.topbar-brand {
+  font-family: var(--fonte-cri);
+  font-weight: 900;
+  font-stretch: 70%;
+  font-size: 1.25rem;
+  letter-spacing: .02em;
+  text-transform: uppercase;
+  text-decoration: none;
+}
+
+.topbar-tel {
+  font-family: var(--fonte-cri);
+  font-weight: 700;
+  font-stretch: 85%;
+  font-size: .85rem;
+  text-decoration: none;
+  background: var(--sanguine);
+  color: var(--papier);
+  padding: .5em .9em;
+  rotate: 1.2deg;
+}
+
+/* ==========================================================================
+   HERO
+   ========================================================================== */
+
+.hero {
+  min-height: calc(100svh - 54px);
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  padding: 40px var(--gouttiere) 34px;
+  position: relative;
+}
+
+.hero-sur {
+  font-family: var(--fonte-cri);
+  font-weight: 700;
+  font-stretch: 85%;
+  text-transform: uppercase;
+  letter-spacing: .14em;
+  font-size: .8rem;
+  margin-bottom: 10px;
+}
+.hero-sur em {
+  font-family: var(--fonte-texte);
+  text-transform: none;
+  letter-spacing: 0;
+  font-size: 1rem;
+  color: var(--sanguine);
+}
+
+.hero-title {
+  font-family: var(--fonte-cri);
+  font-weight: 900;
+  line-height: .84;
+  letter-spacing: -0.015em;
+  font-size: clamp(4.6rem, 24vw, 9rem);
+  text-transform: uppercase;
+  margin-bottom: 20px;
+}
+.hero-line { display: block; font-stretch: 66%; }
+.hero-line-2 {
+  color: var(--sanguine);
+  margin-left: .55em;
+  position: relative;
+}
+.hero-line-2::after {
+  content: "cuisine qui fait du bruit";
+  position: absolute;
+  right: 0;
+  bottom: .28em;
+  font-family: var(--fonte-texte);
+  font-style: italic;
+  font-weight: 500;
+  font-size: clamp(.85rem, 3.4vw, 1.1rem);
+  letter-spacing: 0;
+  text-transform: none;
+  color: var(--encre);
+  rotate: -3deg;
+  translate: 0 100%;
+  white-space: nowrap;
+}
+
+.hero-bas {
+  max-width: var(--mesure);
+  font-size: 1.1rem;
+  margin: 26px 0 24px;
+}
+.hero-bas em { color: var(--sanguine-sombre); }
+
+.hero-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-bottom: 18px;
+}
+
+.btn {
+  font-family: var(--fonte-cri);
+  font-weight: 800;
+  font-stretch: 82%;
+  font-size: .95rem;
+  text-transform: uppercase;
+  letter-spacing: .04em;
+  text-decoration: none;
+  padding: .95em 1.3em;
+  border: 2px solid var(--encre);
+  min-height: 48px;
+  display: inline-flex;
+  align-items: center;
+}
+.btn-plein {
+  background: var(--encre);
+  color: var(--papier);
+}
+.btn-plein:active { background: var(--sanguine); border-color: var(--sanguine); }
+.btn-ligne { background: transparent; color: var(--encre); }
+
+.hero-horaires {
+  font-family: var(--fonte-cri);
+  font-weight: 600;
+  font-stretch: 88%;
+  font-size: .82rem;
+  letter-spacing: .05em;
+  text-transform: uppercase;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.pastille {
+  width: 9px; height: 9px;
+  background: var(--sanguine);
+  border-radius: 50%;
+  flex: none;
+}
+
+/* ==========================================================================
+   BANDES CRIÉE (marquee)
+   ========================================================================== */
+
+.bande {
+  overflow: hidden;
+  background: var(--encre);
+  color: var(--papier);
+  border-block: 2px solid var(--encre);
+  padding: 10px 0;
+}
+.bande-inverse { background: var(--sanguine); }
+
+.bande-piste {
+  display: flex;
+  width: max-content;
+  animation: defile 26s linear infinite;
+}
+.bande-inverse .bande-piste { animation-direction: reverse; }
+
+.bande-piste span {
+  font-family: var(--fonte-cri);
+  font-weight: 800;
+  font-stretch: 75%;
+  font-size: 1rem;
+  text-transform: uppercase;
+  letter-spacing: .08em;
+  white-space: nowrap;
+  padding-right: .5em;
+}
+
+@keyframes defile {
+  to { transform: translateX(-50%); }
+}
+@media (prefers-reduced-motion: reduce) {
+  .bande-piste { animation: none; }
+}
+
+/* ==========================================================================
+   SECTIONS — base
+   ========================================================================== */
+
+.section {
+  padding: 72px var(--gouttiere) 80px;
+  position: relative;
+}
+
+.etiquette {
+  display: inline-block;
+  font-family: var(--fonte-cri);
+  font-weight: 700;
+  font-stretch: 85%;
+  font-size: .75rem;
+  text-transform: uppercase;
+  letter-spacing: .1em;
+  background: var(--papier);
+  border: 2px solid var(--encre);
+  padding: .45em .8em;
+  rotate: -2deg;
+  margin-bottom: 22px;
+  box-shadow: 3px 3px 0 var(--sanguine);
+}
+
+.titre {
+  font-family: var(--fonte-cri);
+  font-weight: 900;
+  font-stretch: 70%;
+  text-transform: uppercase;
+  line-height: .92;
+  letter-spacing: -0.01em;
+  font-size: clamp(2.5rem, 11vw, 5.2rem);
+  margin-bottom: 26px;
+}
+
+/* ==========================================================================
+   № 01 — LE NOM
+   ========================================================================== */
+
+.nom-corps {
+  max-width: var(--mesure);
+  display: grid;
+  gap: 16px;
+  margin-left: auto;
+}
+.nom-corps em { color: var(--sanguine-sombre); }
+
+.nom-lieu {
+  margin-top: 34px;
+  font-family: var(--fonte-cri);
+  font-weight: 900;
+  font-stretch: 66%;
+  font-size: clamp(1.5rem, 7vw, 3rem);
+  text-transform: uppercase;
+  color: var(--sanguine);
+  text-align: right;
+}
+
+/* ==========================================================================
+   № 02 — LA CUISINE / L'ÉTAL
+   ========================================================================== */
+
+.cuisine { background: var(--papier-fonce); }
+
+.etal {
+  list-style: none;
+  display: grid;
+  gap: 56px;
+  margin-top: 44px;
+}
+
+.etal-item {
+  display: grid;
+  gap: 14px;
+}
+
+.etal-cri {
+  font-family: var(--fonte-cri);
+  font-weight: 900;
+  font-stretch: 66%;
+  font-size: clamp(2.2rem, 11.5vw, 4.6rem);
+  line-height: .9;
+  text-transform: uppercase;
+  color: var(--sanguine);
+  letter-spacing: -0.01em;
+}
+.etal-item:nth-child(even) .etal-cri {
+  color: var(--encre);
+  text-align: right;
+}
+
+.etal-texte h3 {
+  font-family: var(--fonte-texte);
+  font-style: italic;
+  font-weight: 600;
+  font-size: 1.35rem;
+  margin-bottom: 6px;
+}
+.etal-texte p { max-width: var(--mesure); }
+.etal-item:nth-child(even) .etal-texte {
+  margin-left: auto;
+  text-align: right;
+}
+.etal-item:nth-child(even) .etal-texte p { margin-left: auto; }
+
+.etal-photo {
+  aspect-ratio: 4 / 3;
+  width: min(78%, 340px);
+  background:
+    repeating-linear-gradient(-45deg,
+      transparent 0 14px,
+      color-mix(in srgb, var(--encre) 6%, transparent) 14px 15px),
+    var(--papier);
+  border: 2px solid var(--encre);
+  display: grid;
+  place-items: center;
+  rotate: -1.4deg;
+}
+.etal-item:nth-child(even) .etal-photo {
+  margin-left: auto;
+  rotate: 1.4deg;
+}
+
+.photo-note {
+  font-family: var(--fonte-cri);
+  font-weight: 700;
+  font-stretch: 85%;
+  font-size: .72rem;
+  text-transform: uppercase;
+  letter-spacing: .1em;
+  text-align: center;
+  line-height: 1.5;
+  color: var(--encre-douce);
+  background: var(--papier);
+  border: 2px solid var(--encre);
+  padding: .6em .9em;
+  rotate: 2deg;
+}
+
+/* ==========================================================================
+   № 03 — LA CARTE
+   ========================================================================== */
+
+.carte-note {
+  font-style: italic;
+  font-size: .95rem;
+  color: var(--encre-douce);
+  max-width: var(--mesure);
+  margin-bottom: 34px;
+}
+
+.carte-bloc { margin-bottom: 34px; }
+
+.carte-cat {
+  font-family: var(--fonte-cri);
+  font-weight: 900;
+  font-stretch: 70%;
+  font-size: 1.3rem;
+  text-transform: uppercase;
+  color: var(--sanguine);
+  margin-bottom: 14px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+.carte-cat::after {
+  content: "";
+  flex: 1;
+  height: 2px;
+  background: var(--encre);
+}
+
+.carte-liste {
+  list-style: none;
+  display: grid;
+  gap: 12px;
+}
+.carte-liste li {
+  display: flex;
+  align-items: baseline;
+  gap: 8px;
+}
+.carte-plat {
+  font-size: 1.1rem;
+  font-weight: 500;
+}
+.carte-points {
+  flex: 1;
+  border-bottom: 2px dotted color-mix(in srgb, var(--encre) 35%, transparent);
+  translate: 0 -4px;
+}
+.carte-prix {
+  font-family: var(--fonte-cri);
+  font-weight: 700;
+  font-stretch: 85%;
+  font-size: .72rem;
+  text-transform: uppercase;
+  letter-spacing: .06em;
+  color: var(--encre-douce);
+}
+
+.carte-appel {
+  margin-top: 44px;
+  font-size: 1.2rem;
+  max-width: var(--mesure);
+}
+.carte-appel em { color: var(--sanguine-sombre); }
+.carte-btn { margin-top: 16px; }
+
+/* ==========================================================================
+   № 04 — LE LIEU
+   ========================================================================== */
+
+.lieu { background: var(--papier-fonce); }
+
+.lieu-corps {
+  max-width: var(--mesure);
+  margin-bottom: 26px;
+}
+.lieu-corps em { color: var(--sanguine-sombre); }
+
+.lieu-photo {
+  aspect-ratio: 3 / 4;
+  width: min(88%, 400px);
+  margin-left: auto;
+  background:
+    repeating-linear-gradient(-45deg,
+      transparent 0 14px,
+      color-mix(in srgb, var(--encre) 6%, transparent) 14px 15px),
+    var(--papier);
+  border: 2px solid var(--encre);
+  display: grid;
+  place-items: center;
+  rotate: 1.2deg;
+}
+
+.lieu-avis {
+  margin-top: 34px;
+  border-left: 4px solid var(--sanguine);
+  padding-left: 16px;
+}
+.lieu-avis-note {
+  font-family: var(--fonte-cri);
+  font-weight: 900;
+  font-stretch: 66%;
+  font-size: clamp(2.6rem, 12vw, 4.5rem);
+  line-height: 1;
+}
+.lieu-avis-detail {
+  font-style: italic;
+  color: var(--encre-douce);
+}
+
+/* ==========================================================================
+   № 05 — INFOS PRATIQUES
+   ========================================================================== */
+
+.infos {
+  background: var(--encre);
+  color: var(--papier);
+}
+
+.etiquette-claire {
+  border-color: var(--papier);
+  background: var(--encre);
+  color: var(--papier);
+  box-shadow: 3px 3px 0 var(--sanguine);
+}
+
+.titre-clair { color: var(--papier); }
+
+.infos-grille {
+  display: grid;
+  gap: 30px;
+  margin-top: 40px;
+}
+
+.infos-bloc dt {
+  font-family: var(--fonte-cri);
+  font-weight: 800;
+  font-stretch: 80%;
+  font-size: .8rem;
+  text-transform: uppercase;
+  letter-spacing: .12em;
+  color: var(--sanguine);
+  margin-bottom: 8px;
+}
+.infos-bloc dd {
+  font-size: 1.15rem;
+  margin-bottom: 4px;
+}
+
+.lien-clair {
+  color: var(--papier);
+  text-decoration-color: var(--sanguine);
+  text-decoration-thickness: 2px;
+  text-underline-offset: 4px;
+}
+
+/* ==========================================================================
+   FOOTER
+   ========================================================================== */
+
+.footer {
+  background: var(--encre);
+  color: var(--papier);
+  padding: 10px var(--gouttiere) 34px;
+  border-top: 2px solid color-mix(in srgb, var(--papier) 25%, transparent);
+}
+
+.footer-nom {
+  font-family: var(--fonte-cri);
+  font-weight: 900;
+  font-stretch: 66%;
+  font-size: clamp(3.4rem, 18vw, 12rem);
+  line-height: 1;
+  text-transform: uppercase;
+  color: var(--sanguine);
+  margin: 18px 0 26px;
+  overflow: hidden;
+}
+
+.footer-nav {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px 20px;
+  margin-bottom: 18px;
+}
+.footer-nav a {
+  font-size: .95rem;
+  font-style: italic;
+  color: color-mix(in srgb, var(--papier) 80%, transparent);
+  text-decoration-color: var(--sanguine);
+  text-underline-offset: 4px;
+}
+
+.footer-credit {
+  font-family: var(--fonte-cri);
+  font-weight: 600;
+  font-stretch: 85%;
+  font-size: .8rem;
+  text-transform: uppercase;
+  letter-spacing: .08em;
+}
+.footer-credit a {
+  color: var(--papier);
+  text-decoration-color: var(--sanguine);
+  text-decoration-thickness: 2px;
+  text-underline-offset: 4px;
+}
+
+/* ==========================================================================
+   RÉVÉLATIONS AU SCROLL
+   ========================================================================== */
+
+@media (prefers-reduced-motion: no-preference) {
+  .revele {
+    opacity: 0;
+    translate: 0 22px;
+    transition: opacity .55s ease, translate .55s cubic-bezier(.2,.7,.3,1);
+  }
+  .revele.visible {
+    opacity: 1;
+    translate: 0 0;
+  }
+  [data-stretch] {
+    transition: font-stretch .5s cubic-bezier(.2,.7,.3,1);
+  }
+}
+
+/* Mode QA — captures pleine page sans unités viewport */
+.qa .hero { min-height: 740px; }
+
+/* ==========================================================================
+   DESKTOP — extension plus ample, plus retenue
+   ========================================================================== */
+
+@media (min-width: 760px) {
+  :root {
+    --gouttiere: clamp(40px, 7vw, 110px);
+    --mesure: 44ch;
+  }
+
+  body { font-size: 1.125rem; }
+
+  .hero {
+    min-height: calc(100vh - 58px);
+    justify-content: center;
+  }
+  .hero-title { font-size: clamp(9rem, 20vw, 17rem); }
+  .hero-line-2 { margin-left: 1.1em; }
+  .hero-bas { font-size: 1.25rem; }
+
+  .section { padding: 120px var(--gouttiere) 130px; }
+
+  .titre { font-size: clamp(4.5rem, 7.5vw, 7.5rem); }
+
+  .nom-corps {
+    margin-left: 38%;
+    max-width: 52ch;
+    grid-template-columns: 1fr 1fr;
+    gap: 32px;
+  }
+
+  .etal { gap: 90px; margin-top: 70px; }
+  .etal-item {
+    grid-template-columns: 1.2fr 1fr;
+    align-items: center;
+    gap: 20px 60px;
+  }
+  .etal-cri {
+    grid-column: 1 / -1;
+    font-size: clamp(4rem, 8.5vw, 8rem);
+  }
+  .etal-photo { width: min(100%, 460px); }
+  .etal-item:nth-child(even) .etal-texte { order: 2; }
+  .etal-item:nth-child(even) .etal-photo { order: 1; margin-left: 0; margin-right: auto; }
+
+  .carte-bloc {
+    max-width: 640px;
+  }
+  .carte-bloc:nth-of-type(even) { margin-left: auto; }
+
+  .infos-grille {
+    grid-template-columns: repeat(4, 1fr);
+    gap: 40px;
+  }
+
+  .footer-nom { font-size: clamp(10rem, 19vw, 20rem); }
+}
+
+@media (min-width: 1200px) {
+  .hero-bas { margin-left: 42%; }
+}

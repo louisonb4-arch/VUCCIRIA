@@ -1,0 +1,23 @@
+/* Pages légales — Vucciria */
+.legal {
+  padding: 56px var(--gouttiere) 90px;
+  max-width: 720px;
+}
+.legal .titre { font-size: clamp(2.4rem, 9vw, 4.5rem); }
+.legal h2 {
+  font-family: var(--fonte-cri);
+  font-weight: 800;
+  font-stretch: 75%;
+  text-transform: uppercase;
+  font-size: 1.1rem;
+  color: var(--sanguine);
+  margin: 34px 0 10px;
+}
+.legal p { margin-bottom: 12px; max-width: 60ch; }
+.legal strong { color: var(--sanguine-sombre); }
+.legal a {
+  text-decoration-color: var(--sanguine);
+  text-decoration-thickness: 2px;
+  text-underline-offset: 4px;
+}
+.legal-retour { margin-top: 48px; font-style: italic; }
